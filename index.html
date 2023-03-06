@@ -20,19 +20,19 @@
             <div class="card" style="width: 18rem;">
                 <h3 class="card-header text-uppercase">Pick a city:</h3>
                 <form id="user-form" class="card-body">
-                  <label class="form-label" for="username">City</label>
-                  <input name="username" id="username" type="text" autofocus="true" class="form-input" />
-                  <button type="submit" class="btn"> How 'bout that weather?</button>
+                   <label class="form-label" for="city">City</label><!--'for' gets the id from the input element's attribute -->
+                  <input name="city-search" id="city" type="text" autofocus="true" class="form-input" />
+                  <button type="submit" class="searchBtn"> How 'bout that weather?</button>
                 </form>
               </div>
           
             <div class="card" style="width: 18rem;">
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">One City</li>
-                  <li class="list-group-item">Two City</li>
-                  <li class="list-group-item">Red City </li>
-                  <li class="list-group-item">Blue City</li>
-                </ul>
+                <h3 class="card-header text-uppercase">Search By Topic</h3>
+                <div id="cityBtns" class="card-body">
+                  <button data-city="New-York-City, New York" class="btn">New York City</button>
+                  <button data-city="Los-Angelos, California" class="btn">Los Angelos</button>
+                  <button data-city="Miami, Florida" class="btn">Miami</button>
+                </div>
               </div>
         </aside>
         <section>
@@ -40,6 +40,7 @@
             <div>
                 <h3>Here's what the next five days will look like:
                 </h3>
+                <div id="forecast"></div>
                 <!-- ol by date(?), insert info from api -->
             </div>
         </section>
