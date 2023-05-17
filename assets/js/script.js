@@ -3,6 +3,7 @@ let userFormEl = document.querySelector('#user-form'); //id of entire form eleme
 let cityButtonsEl = document.querySelector('#cityBtns');//creates a variable for all city buttons (we'll use this later as data.items, city)
 let searchBarEl = document.querySelector("#city");//input box for user to type in text
 let forecastEl = document.querySelector('#forecast');// creates variable for where we will populate the forecast data
+let cityNameEl = document.querySelector('#nameDisplay')
 //do I need to create a variable for the city selected? maybe not yet
 
 let searchHandler = function (event) {
@@ -11,7 +12,7 @@ let searchHandler = function (event) {
     console.log(city);//works fine
     if (city) {//if the typed text is a city
         findCity(city); //run function to find the city latitutde and longitude
-
+        
         //citynamedisplayEl.textContent = '';//element containing the city name above the forecast will populate with the appropriate city name
     }
     else {
@@ -30,53 +31,51 @@ let citySelectHandler = function (event) {
 };
 
 
-function findCity(city) {
-    // city = searchBarEl.value;
+function findCity(city) {//findCity function is just to retrieve lat and lon from GeoUrl
     let geoUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
-    console.log(geoUrl)
     fetch(geoUrl)
         .then(function (response) {
             // if (response.ok) {
             return response.json()
         }).then(function (data) {
             // displayWeather(data, city);
-            console.log(data)
+            // console.log(data.coord);
+            findWeather(data);
         })
-            // } else {
-            //     alert('error' + response.statusText);
-            // }
-        
-        .catch (function (error) {
-        alert('Unable to connect')
-    });
+        // } else {
+        //     alert('error' + response.statusText);
+        // }
 
-
-
+        .catch(function (error) {
+            alert('Unable to connect')
+        });
 };
 
 let findWeather = function (data) {//?
-    let lat = geoUrl.data.coord.lat;
-    let lon = geoUrl.data.coord.lon;
-    let weatherUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=a45956615d08755348fb789b5fb711ed";
+         lat = data.coord.lat;
+         lon = data.coord.lon;
+        let weatherUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=a45956615d08755348fb789b5fb711ed";
 
-    fetch(weatherUrl)
-        .then(function (response) {
-            return response.json;
+        fetch(weatherUrl)
+            .then(function (response) {
+                return response.json
+            })
+            .then(function (data) {
+            displayWeather();
+            //console.log(lat,lon)lat and lon are going through
+            console.log(weatherUrl)
+                // let docArray = data.response.docs;
+                // //create a for loop to go trhough each object in the array
+                // for (let i = 0; i < docArray.length; i++) {
+                //     const listItem = document.createElement("li");
 
-        })
-        .then(function (data) {
-            console.log(city);
-            // let docArray = data.response.docs;
-            // //create a for loop to go trhough each object in the array
-            // for (let i = 0; i < docArray.length; i++) {
-            //     const listItem = document.createElement("li");
-
-            // }
-        });
-}
-
+                // }
+            });
+    } 
 let displayWeather = function (data, city) {
-//display will create elements?
+    cityNameEl.textContent = city;
+    forecastEl.textContent = data
+    //display will create elements?
 }
 
 document.querySelector(".searchBtn").addEventListener("click", searchHandler);
