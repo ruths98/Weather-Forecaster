@@ -32,7 +32,8 @@ let citySelectHandler = function (event) {
 findCity;
 function findCity() {
     city = searchBarEl.value;
-    let geoUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`;
+   let geoUrl = `https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}`
+    // let geoUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`;
     fetch(geoUrl)
         .then(function (response) {
             if (response.ok) {
