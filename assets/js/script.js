@@ -29,34 +29,34 @@ let citySelectHandler = function (event) {
     }
 };
 
-findCity;
-function findCity() {
-    city = searchBarEl.value;
-   let geoUrl = `https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}`
-    // let geoUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${apiKey}`;
+
+function findCity(city) {
+    // city = searchBarEl.value;
+    let geoUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
+    console.log(geoUrl)
     fetch(geoUrl)
         .then(function (response) {
-            if (response.ok) {
-                 return response.json()
-                 .then(function(data){
-                    displayWeather(data, city);
-                    console.log(data);
-                 });
-                } else {
-                alert('error' + response.statusText);
-            } 
+            // if (response.ok) {
+            return response.json()
+        }).then(function (data) {
+            // displayWeather(data, city);
+            console.log(data)
         })
-                   .catch(function (error) {
-            alert('Unable to connect')
-        });
+            // } else {
+            //     alert('error' + response.statusText);
+            // }
+        
+        .catch (function (error) {
+        alert('Unable to connect')
+    });
 
 
 
 };
 
-let findWeather = function (data,city) {//?
-    let lat = geoUrl.data.lat;
-    let lon = geoUrl.data.lon;
+let findWeather = function (data) {//?
+    let lat = geoUrl.data.coord.lat;
+    let lon = geoUrl.data.coord.lon;
     let weatherUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=a45956615d08755348fb789b5fb711ed";
 
     fetch(weatherUrl)
@@ -75,8 +75,8 @@ let findWeather = function (data,city) {//?
         });
 }
 
-let displayWeather = function(data,city){
-
+let displayWeather = function (data, city) {
+//display will create elements?
 }
 
 document.querySelector(".searchBtn").addEventListener("click", searchHandler);
