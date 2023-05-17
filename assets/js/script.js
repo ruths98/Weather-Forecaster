@@ -54,16 +54,16 @@ function findCity(city) {//findCity function is just to retrieve lat and lon fro
 let findWeather = function (data) {//?
          lat = data.coord.lat;
          lon = data.coord.lon;
-        let weatherUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=a45956615d08755348fb789b5fb711ed";
+        let weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=a45956615d08755348fb789b5fb711ed`;
 
         fetch(weatherUrl)
             .then(function (response) {
                 return response.json
             })
             .then(function (data) {
-            displayWeather();
-            //console.log(lat,lon)lat and lon are going through
-            console.log(weatherUrl)
+            // displayWeather(data, city);
+            console.log(data.temp)
+            
                 // let docArray = data.response.docs;
                 // //create a for loop to go trhough each object in the array
                 // for (let i = 0; i < docArray.length; i++) {
