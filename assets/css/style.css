@@ -14,3 +14,7 @@ h1 {
     background-color:rgb(28, 13, 96);
     /* make it a gradient */
 }
+
+#nameDisplay {
+    border: 1px solid black;
+}
