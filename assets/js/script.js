@@ -4,6 +4,7 @@ let cityButtonsEl = document.querySelector('#cityBtns');//creates a variable for
 let searchBarEl = document.querySelector("#city");//input box for user to type in text
 let forecastEl = document.querySelector('#forecast');// creates variable for where we will populate the forecast data
 let cityNameEl = document.querySelector('#nameDisplay')
+const date = new Date();
 //do I need to create a variable for the city selected? maybe not yet
 
 let searchHandler = function (event) {
@@ -12,8 +13,11 @@ let searchHandler = function (event) {
     console.log(city);//works fine
     if (city) {//if the typed text is a city
         findCity(city); //run function to find the city latitutde and longitude
-        
-        //citynamedisplayEl.textContent = '';//element containing the city name above the forecast will populate with the appropriate city name
+
+        // cityNameEl.textContent = city;
+        //only works here, not in displayWeather function
+        // //.innerHTML and .textContent shows the city name for about half a second then says [object HTMLInput Element]
+        // //element containing the city name above the forecast will populate with the appropriate city name
     }
     else {
         alert('Please make sure you put in a properly spelled city name')
@@ -52,30 +56,48 @@ function findCity(city) {//findCity function is just to retrieve lat and lon fro
 };
 
 let findWeather = function (data) {//?
-         lat = data.coord.lat;
-         lon = data.coord.lon;
-        let weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=a45956615d08755348fb789b5fb711ed`;
+    lat = data.coord.lat;
+    lon = data.coord.lon;
+    let weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
+    //note the '$units=imperial' in the url above is what the weatherApi website provides but we still only get our units in kelvins.
+    console.log(lat, lon)
+    fetch(weatherUrl)
+        .then(function (response) {
+            return response.json()//if you do not have the () you will get an empty json object
+        })
 
-        fetch(weatherUrl)
-            .then(function (response) {
-                return response.json
-            })
-            .then(function (data) {
-            // displayWeather(data, city);
-            console.log(data.temp)
-            
-                // let docArray = data.response.docs;
-                // //create a for loop to go trhough each object in the array
-                // for (let i = 0; i < docArray.length; i++) {
-                //     const listItem = document.createElement("li");
+    displayWeather(data);
+}
+let displayWeather = function (data) {
+    const temp = data.main.temp;
+    const wind = data.wind.speed;
+    const humidity = data.main.humidity
+    const weatherData = [temp, wind, humidity]
+    console.log(weatherData)
+    if (!city) {
+        forecastEl.textContent = 'Weather not found for this city, try again.'
+    } else {
+        cityNameEl.textContent = `${city} ${date.toLocaleDateString()}`;
 
-                // }
-            });
-    } 
-let displayWeather = function (data, city) {
-    cityNameEl.textContent = city;
-    forecastEl.textContent = data
-    //display will create elements?
+        for (const i = 0; i < date.length; i++) {
+            const date = date[i] //how to add +1 to day of month?
+            //create span element to display the date
+            const dateEl = document.createElement('span');
+            dateEl.textContent = date;
+            //appending the dateEl to the cityNameEl as a child element
+            cityNameEl.appendChild(dateEl);
+            //creating a span for the dataEl
+            const dataEl = document.createElement('span');
+            dataEl.classList = 'flex-row align-center';
+
+            dataEl.innerHTML = weatherData;
+
+            cityNameEl.appendChild(dateEl);
+
+            cityNameEl.appendChild(weatherData);
+        }
+    }
+
 }
 
 document.querySelector(".searchBtn").addEventListener("click", searchHandler);
