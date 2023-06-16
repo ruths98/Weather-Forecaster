@@ -13,7 +13,7 @@ https://ruths98.github.io/Weather-Forecaster/
 If you have any comments or concerns, you may find me on github at: https://github.com/ruths98
 
 Screenshots:
-![screenshot of project in action](/assets/Screenshot%20(58).png)
+![screenshot of project in action](./Screenshot%20(58).png)
 
 
 ## Credits
