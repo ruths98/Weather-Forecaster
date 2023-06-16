@@ -3,9 +3,8 @@ let userFormEl = document.querySelector('#user-form'); //id of entire form eleme
 let cityButtonsEl = document.querySelector('#cityBtns');//creates a variable for all city buttons (we'll use this later as data.items, city)
 let searchBarEl = document.querySelector("#city");//input box for user to type in text
 let forecastEl = document.querySelector('#forecast');// creates variable for where we will populate the forecast data
-let cityNameEl = document.querySelector('#nameDisplay')
+let todayEl = document.querySelector('#today')
 const date = new Date();
-//do I need to create a variable for the city selected? maybe not yet
 
 let searchHandler = function (event) {
     event.preventDefault();//keeps page from refreshing when submit button is clicked
@@ -26,10 +25,10 @@ let searchHandler = function (event) {
 }
 
 let citySelectHandler = function (event) {
-    let popCity = event.target.getAttribute('data-city');//selects the clicked on popular city
+    let city = event.target.getAttribute('data-city');//selects the clicked on popular city
 
-    if (popCity) {//if a popular city button is clicked
-        getPopWeather(popCity);//run the getWeather function using popCity as the 'city'
+    if (city) {//if a popular city button is clicked
+        findCity(city);//run the getWeather function using popCity as the 'city'
         //citynamedisplayEl.textContent = '';// title element above displayed weather will have the name of the popular city selected
     }
 };
@@ -50,9 +49,9 @@ function findCity(city) {//findCity function is just to retrieve lat and lon fro
         //     alert('error' + response.statusText);
         // }
 
-        .catch(function (error) {
-            alert('Unable to connect')
-        });
+        // .catch(function (error) {
+        //     alert('Unable to connect')
+        // });
 };
 
 let findWeather = function (data) {//?
@@ -77,27 +76,38 @@ let displayWeather = function (data) {
     if (!city) {
         forecastEl.textContent = 'Weather not found for this city, try again.'
     } else {
-        cityNameEl.textContent = `${city} ${date.toLocaleDateString()}`;
+        // cityNameEl.innerHTML = data.name;
 
-        for (const i = 0; i < date.length; i++) {
-            const date = date[i] //how to add +1 to day of month?
-            //create span element to display the date
-            const dateEl = document.createElement('span');
-            dateEl.textContent = date;
-            //appending the dateEl to the cityNameEl as a child element
-            cityNameEl.appendChild(dateEl);
-            //creating a span for the dataEl
-            const dataEl = document.createElement('span');
-            dataEl.classList = 'flex-row align-center';
+        //current day data
+        const currentDate = document.createElement('h2');
+        currentDate.innerHTML = `${data.name} ${date.toLocaleDateString()}`;
+        //appending the currentDate to the cityNameEl as a child element
+        todayEl.appendChild(currentDate);
+        //creating a span for the currentWeather data
+        const currentTemp = document.createElement('li');
+        const currentWind = document.createElement('li');
+        const currentHumidity = document.createElement('li');
 
-            dataEl.innerHTML = weatherData;
+        currentTemp.classList = 'flex-row align-center';
+        currentWind.classList = 'flex-row align-center';
+        currentHumidity.classList = 'flex-row align-center';
 
-            cityNameEl.appendChild(dateEl);
+        currentTemp.innerHTML = `Temperature: ${temp}`;
+        currentWind.innerHTML = `Wind Speed: ${wind}`;
+        currentHumidity.innerHTML = `Humidity: ${humidity}%`;
 
-            cityNameEl.appendChild(weatherData);
-        }
+        todayEl.appendChild(currentTemp);
+        todayEl.appendChild(currentWind);
+        todayEl.appendChild(currentHumidity);
+
+        // for (const i = 1; i < 5; i++) {
+        //     const dates = dt.list[i]
+        //     console.log(dates)
+        // } figure out later ig
+        
     }
 
 }
 
 document.querySelector(".searchBtn").addEventListener("click", searchHandler);
+document.querySelector(".btn").addEventListener("click", citySelectHandler);
