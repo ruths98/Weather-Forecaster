@@ -35,23 +35,24 @@ let citySelectHandler = function (event) {
 
 
 function findCity(city) {//findCity function is just to retrieve lat and lon from GeoUrl
-    let geoUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`
+    let geoUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`
     fetch(geoUrl)
         .then(function (response) {
             // if (response.ok) {
             return response.json()
         }).then(function (data) {
             // displayWeather(data, city);
-            // console.log(data.coord);
+            console.log(data);
             findWeather(data);
-        })
-        // } else {
-        //     alert('error' + response.statusText);
-        // }
 
-        // .catch(function (error) {
-        //     alert('Unable to connect')
-        // });
+        })
+    // } else {
+    //     alert('error' + response.statusText);
+    // }
+
+    // .catch(function (error) {
+    //     alert('Unable to connect')
+    // });
 };
 
 let findWeather = function (data) {//?
@@ -64,8 +65,13 @@ let findWeather = function (data) {//?
         .then(function (response) {
             return response.json()//if you do not have the () you will get an empty json object
         })
+        .then(function (fiveDayData) {
+
+            foreCast(fiveDayData)
+        })
 
     displayWeather(data);
+
 }
 let displayWeather = function (data) {
     const temp = data.main.temp;
@@ -100,13 +106,45 @@ let displayWeather = function (data) {
         todayEl.appendChild(currentWind);
         todayEl.appendChild(currentHumidity);
 
-        // for (const i = 1; i < 5; i++) {
-        //     const dates = dt.list[i]
-        //     console.log(dates)
-        // } figure out later ig
-        
     }
+}
 
+const foreCast = (fiveDayData) => {
+
+
+    console.log(fiveDayData)
+    if (fiveDayData) {
+        for (let i = 0; i < fiveDayData.list.length; i += 8) {
+            days = fiveDayData.list[i];
+            console.log(days)
+            const temp = days.temp;
+            const wind = days.speed;
+            const humidity = days.humidity
+            //the loop should create five different boxes with their own respective data
+            const fiveDayEl = document.createElement('p');
+            fiveDayEl.innerHTML = `${days}`;
+            //appending the fiveDayEl to the forecast as a child element
+            forecastEl.appendChild(fiveDayEl);
+            //creating a p element for each item
+            const fiveDayTemp = document.createElement('li');
+            const fiveDayWind = document.createElement('li');
+            const fiveDayHumidity = document.createElement('li');
+
+            fiveDayTemp.classList = 'flex-row align-center';
+            fiveDayWind.classList = 'flex-row align-center';
+            fiveDayHumidity.classList = 'flex-row align-center';
+
+            fiveDayTemp.innerHTML = `Temperature: ${days.temp}`;
+            fiveDayWind.innerHTML = `Wind Speed: ${days.wind}`;
+            fiveDayHumidity.innerHTML = `Humidity: ${days.humidity}%`;
+
+            fiveDayEl.appendChild(fiveDayTemp);
+            fiveDayEl.appendChild(fiveDayWind);
+            fiveDayEl.appendChild(fiveDayHumidity);
+        }
+    } else {
+        forecastEl.textContent = 'Weather not found for this city, try again.'
+    }
 }
 
 document.querySelector(".searchBtn").addEventListener("click", searchHandler);
